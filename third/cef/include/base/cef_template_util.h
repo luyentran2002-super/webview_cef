@@ -157,7 +157,7 @@ struct priority_tag<0> {};
 //   https://llvm.org/bugs/show_bug.cgi?id=27538#c1 again), so we must check for
 //   that version.
 // - When __is_trivially_copyable() is not available because we are on gcc older
-//   than 5.1, we need to fall back to something, so we use __has_trivial_copy()
+//   than 5.1, we need to fall back to something, so we use __is_trivially_copyable()
 //   instead based on what was done one-off in bit_cast() previously.
 
 // TODO(crbug.com/554293): Remove this when all platforms have this in the std
@@ -173,7 +173,7 @@ struct is_trivially_copyable {
   static constexpr bool value = __is_trivially_copyable(T);
 #else
   static constexpr bool value =
-      __has_trivial_copy(T) && __has_trivial_destructor(T);
+      __is_trivially_copyable(T) && __is_trivially_destructible(T);
 #endif
 };
 #else
